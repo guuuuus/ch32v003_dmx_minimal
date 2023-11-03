@@ -3,7 +3,7 @@ Guus 2023. channel vals are 0-511 (NOT 1-512)
 tested on ch32v003.
 This library does not set the rs485 driver in the right direction. Do so before starting or permanent by hardware.
 Receiver only, doesn't save a full frame so a doesn't require much memory.
-make shure to declare a global volatile arr or malloc a global volatile arr before sending it to dmx_beginRX().
+make shure to declare a volatile arr before sending it to dmx_beginRX().
 The callbak is running in the itc, so maybe make short and snappy.
 */
 
@@ -28,17 +28,18 @@ typedef enum
     DMX_RUN = 0x04
 } dmx_state_t;
 
-// starts the receiver
+// starts the receiver, startaddress  -=1 (0-511), buffer and buffer lenght
 unsigned short dmx_beginRX(unsigned short startaddr, volatile unsigned char *p, unsigned short len);
 // stop
 void dmx_stop();
 
-// callback thats fired if all requested addresses are updated
+// callback thats fired if all requested addresses are updated this happans inside itc.
 void dmx_setCallback(void (*p)(void));
 
+// changes the startaddress. 
 unsigned short dmx_changeAddres(unsigned short addr);
 
-// set the startcode to filter at
+// set the startcode to filter at. normaly set to 0x00
 void dmx_setStartcode(unsigned char sc);
 
 // returns 0xff if new frame is avail since last check
