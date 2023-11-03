@@ -1,10 +1,10 @@
 /*
 Guus 2023. channel vals are 0-511 (NOT 1-512)
 tested on ch32v003.
-make shure to maloc a 
 This library does not set the rs485 driver in the right direction. Do so before starting or permanent by hardware.
-doesn't save a full frame so a doesn't require much memory
-make shure to declare a global volatile arr or malloc a global volatile arr before sending it to dmx_beginRX()
+Receiver only, doesn't save a full frame so a doesn't require much memory.
+make shure to declare a global volatile arr or malloc a global volatile arr before sending it to dmx_beginRX().
+The callbak is running in the itc, so maybe make short and snappy.
 */
 
 #ifndef dmx_minimal_ch32v_h

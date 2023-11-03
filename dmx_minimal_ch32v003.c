@@ -27,7 +27,7 @@ void dmx_irqCallbackPlaceholder()
 unsigned short dmx_beginRX(unsigned short startaddr, volatile unsigned char *p, unsigned short len)
 {
     unsigned short ret = 0;
-    if ((startaddr + len) > 511)
+    if ((startaddr + len) > 512)
     {
         ret = -1;
         return ret;
@@ -61,6 +61,8 @@ unsigned short dmx_beginRX(unsigned short startaddr, volatile unsigned char *p, 
     USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
     NVIC_EnableIRQ(USART1_IRQn);
+    NVIC_SetPriority(USART1_IRQn, 0xe0);
+
 
     USART_Cmd(USART1, ENABLE);
 
@@ -144,7 +146,7 @@ void USART1_IRQHandler()
         {
             dmx_dataP[dmx_poscoutner] = data;
             dmx_poscoutner++;
-            if (dmx_poscoutner > dmx_addresslen)
+            if (dmx_poscoutner >= dmx_addresslen)
             {
                 dmx_state = DMX_BREAK;
                 dmx_callback();
